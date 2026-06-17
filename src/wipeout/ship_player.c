@@ -362,9 +362,7 @@ void ship_player_update_race(ship_t *self) {
 			self->velocity = vec3_add(self->velocity, vec3_mulf(face->normal, 64.0 * 30 * system_tick()));
 		}
 
-		if (height < 50) {
-			height = 50;
-		}
+		height = fmaxf(height, 50);
 
 		// Calculate acceleration
 		float brake = (self->brake_left + self->brake_right);

@@ -293,8 +293,6 @@ void track_draw(camera_t *camera) {
 	vec3_t cam_pos = camera->position;
 	vec3_t cam_dir = camera_forward(camera);
 	
-	int drawn = 0;
-	int skipped = 0;
 	for(int32_t i = 0; i < g.track.section_count; i++) {
 		section_t *s = &g.track.sections[i];
 		vec3_t diff = vec3_sub(cam_pos, s->center);

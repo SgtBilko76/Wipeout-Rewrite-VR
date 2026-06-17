@@ -16,10 +16,8 @@ vec3_t vec3_wrap_angle(vec3_t a) {
 }
 
 float vec3_angle(vec3_t a, vec3_t b) {
-	float magnitude = sqrtf(
-		(a.x * a.x + a.y * a.y + a.z * a.z) * 
-		(b.x * b.x + b.y * b.y + b.z * b.z)
-	);
+	float magnitude = vec3_len(a) * vec3_len(b);
+
 	float cosine = (magnitude == 0)
 		? 1
 		: vec3_dot(a, b) / magnitude;

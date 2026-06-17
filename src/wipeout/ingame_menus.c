@@ -385,7 +385,6 @@ static void page_hall_of_fame_draw(menu_t *menu, int data) {
 		save.is_dirty = true;
 		
 		// Insert new highscore entry into the save struct
-		highscores_entry_t temp_entry = hs->entries[0];
 		for (int i = 0; i < NUM_HIGHSCORES; i++) {
 			if (hs_new_entry.time < hs->entries[i].time) {
 				for (int j = NUM_HIGHSCORES - 2; j >= i; j--) {

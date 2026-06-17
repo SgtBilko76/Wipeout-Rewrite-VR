@@ -231,7 +231,7 @@ static inline vec3_t vec3_normalize(vec3_t a) {
 }
 
 static inline float wrap_angle(float a) {
-	a = fmod(a + M_PI, M_PI * 2);
+	a = fmodf(a + M_PI, M_PI * 2);
 	if (a < 0) {
 		a += M_PI * 2;
 	}
