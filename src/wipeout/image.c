@@ -291,7 +291,6 @@ texture_list_t image_get_compressed_textures(char *name) {
 	texture_list_t list = {.start = render_textures_len(), .len = cmp->len};
 
 	for (int i = 0; i < cmp->len; i++) {
-		int32_t width, height;
 		image_t *image = image_load_from_bytes(cmp->entries[i], false);
 
 		// char png_name[1024] = {0};

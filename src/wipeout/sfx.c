@@ -354,7 +354,7 @@ void sfx_stero_mix(float *buffer, uint32_t len) {
 			sfx->position += sfx->pitch;
 			if (sfx->position >= source->len) {
 				if (flags_is(sfx->flags, SFX_LOOP)) {
-					sfx->position = fmod(sfx->position, source->len);
+					sfx->position = fmodf(sfx->position, source->len);
 				}
 				else {
 					flags_rm(sfx->flags, SFX_PLAY);

@@ -447,9 +447,7 @@ void ship_ai_update_race(ship_t *self) {
 		vec3_t face_point = face->tris[0].vertices[0].pos;
 		float height = vec3_distance_to_plane(self->position, face_point, face->normal);
 
-		if (height < 50) {
-			height = 50;
-		}
+		height = fmaxf(height, 50);
 
 		self->acceleration = vec3_add(self->acceleration, vec3_mulf(vec3_sub(
 			vec3_mulf(face->normal, (SHIP_TRACK_FLOAT * SHIP_TRACK_MAGNET) / height),
@@ -458,7 +456,7 @@ void ship_ai_update_race(ship_t *self) {
 		self->velocity = vec3_add(self->velocity, vec3_mulf(self->acceleration, 30 * system_tick()));
 
 
-		float xy_dist = sqrtf(track_target.x * track_target.x + track_target.z * track_target.z);
+		float xy_dist = vec3_len(vec3_mul(track_target, vec3(1,0,1)));
 
 		self->angular_velocity.x = wrap_angle(-atan2(track_target.y, xy_dist) - self->angle.x) * (1.0/16.0) * 30;
 		self->angular_velocity.y = (wrap_angle(-atan2(track_target.x, track_target.z) - self->angle.y) * (1.0/16.0)) * 30 + self->turn_rate_from_hit;

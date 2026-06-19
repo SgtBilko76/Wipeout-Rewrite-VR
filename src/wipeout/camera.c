@@ -114,7 +114,7 @@ void camera_update_attract_circle(camera_t *camera, ship_t *ship, droid_t *droid
 	camera->position = vec3_add(camera->position, vec3_mulf(ship->mat.basis.down.vec3, 256));
 	
 	vec3_t target = vec3_sub(ship->position, camera->position);
-	float height = sqrtf(target.x * target.x + target.z * target.z);
+	float height = vec3_len(vec3_mul(target, vec3(1,0,1)));
 	camera->angle.x = -atan2f(target.y, height);
 	camera->angle.y = -atan2f(target.x, target.z);
 }
@@ -123,7 +123,7 @@ void camera_update_rescue(camera_t *camera, ship_t *ship, droid_t *droid) {
 	camera->position = vec3_add(camera->section->center, vec3(300, -1500, 300));
 
 	vec3_t target = vec3_sub(droid->position, camera->position);
-	float height = sqrtf(target.x * target.x + target.z * target.z);
+	float height = vec3_len(vec3_mul(target, vec3(1,0,1)));
 	camera->angle.x = -atan2f(target.y, height);
 	camera->angle.y = -atan2f(target.x, target.z);
 }
@@ -147,7 +147,8 @@ void camera_update_static_follow(camera_t *camera, ship_t *ship, droid_t *droid)
 	}
 
 	vec3_t target = vec3_sub(ship->position, camera->position);
-	float height = sqrtf(target.x * target.x + target.z * target.z);
+	float height = vec3_len(vec3_mul(target, vec3(1,0,1)));
+
 	camera->angle.x = -atan2f(target.y, height);
 	camera->angle.y = -atan2f(target.x, target.z);
 }

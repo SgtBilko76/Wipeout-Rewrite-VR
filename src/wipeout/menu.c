@@ -9,7 +9,7 @@
 
 bool blink(void) {
 	// blink 30 times per second
-	return fmod(system_cycle_time(), 1.0/15.0) < 1.0/30.0;
+	return fmodf(system_cycle_time(), 1.0/15.0) < 1.0/30.0;
 }
 
 void menu_reset(menu_t *menu) {

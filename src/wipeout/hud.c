@@ -128,13 +128,10 @@ static void hud_draw_speedo_bars(vec2i_t *pos, float f, rgba_t color_override) {
 	if (f <= 0) {
 		return;
 	}
-
 	if (f - floor(f) > 0.9) {
 		f = ceilf(f);
 	}
-	if (f > 13) {
-		f = 13;
-	}
+	f = fminf(f,13);
 
 	int bars = f;
 	for (int i = 1; i < bars; i++) {
@@ -150,9 +147,8 @@ static void hud_draw_speedo_bars(vec2i_t *pos, float f, rgba_t color_override) {
 		return;
 	}
 
-	if (last_bar_fraction > 1) {
-		last_bar_fraction = 1;
-	}
+	last_bar_fraction = fminf(last_bar_fraction, 1);
+
 	int last_bar = bars == 0 ? 1 : bars;
 	hud_draw_speedo_bar(pos, &speedo.bars[last_bar - 1], &speedo.bars[last_bar], last_bar_fraction, color_override);
 }

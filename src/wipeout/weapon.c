@@ -11,10 +11,6 @@
 #include "particle.h"
 #include "camera.h"
 
-extern int32_t ctrlNeedTargetIcon;
-extern int ctrlnearShip;
-int16_t Shielded = 0;
-
 typedef struct weapon_t {
 	float timer;
 	ship_t *owner;
@@ -253,7 +249,7 @@ void weapon_follow_target(weapon_t *self) {
 	vec3_t angular_velocity = vec3(0, 0, 0);
 	if (self->target) {
 		vec3_t dir = vec3_mulf(vec3_sub(self->target->position, self->position), 0.125 * 30 * system_tick());
-		float height = sqrtf(dir.x * dir.x + dir.z * dir.z);
+		float height = vec3_len(vec3_mul(dir, vec3(1,0,1)));
 		angular_velocity.y = -atan2(dir.x, dir.z) - self->angle.y;
 		angular_velocity.x = -atan2(dir.y, height) - self->angle.x;
 	}

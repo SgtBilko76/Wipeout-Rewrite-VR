@@ -631,6 +631,8 @@ void ship_resolve_wing_collision(ship_t *self, track_face_t *face, float directi
 
 void ship_resolve_nose_collision(ship_t *self, track_face_t *face, float direction) {
 	vec3_t collision_vector = vec3_sub(self->section->center, face->tris[0].vertices[2].pos);
+	// TODO: In the PSX original, nose collisions change depending on the angle to the wall,
+	// but here this variable goes unused.
 	float angle = vec3_angle(collision_vector, self->mat.basis.forward.vec3);
 	self->velocity = vec3_reflect(self->velocity, face->normal, 2);
 	self->position = vec3_sub(self->position, vec3_mulf(self->velocity, 0.015625)); // system_tick?
