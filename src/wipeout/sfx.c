@@ -291,7 +291,7 @@ void sfx_music_play(uint32_t index) {
 		return;
 	}
 
-	printf("open music track %d\n", index);
+	printf("open music track %s\n", def.music[index].name);
 
 	music->track_index = index;
 	sfx_music_open(def.music[index].path);
