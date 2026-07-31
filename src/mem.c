@@ -57,7 +57,7 @@ void mem_reset(void *p) {
 // Temporary allocated bytes are not allowed to persist for multiple frames. You
 // need to explicitly free them when you are done. Temp allocated bytes don't 
 // have be freed in reverse allocation order. I.e. you can allocate A then B, 
-// and aftewards free A then B.
+// and afterwards free A then B.
 
 void *mem_temp_alloc(uint32_t size) {
 	size = round_up_to_word(size);

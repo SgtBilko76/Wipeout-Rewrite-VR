@@ -376,7 +376,7 @@ static GLuint backbuffer_depth_buffer = 0;
 
 prg_game_t *prg_game;
 prg_post_t *prg_post;
-prg_post_t *prg_post_effects[NUM_RENDER_POST_EFFCTS] = {};
+prg_post_t *prg_post_effects[NUM_RENDER_POST_EFFECTS] = {};
 
 // Intra-frame counts
 static render_stats_t running_stats = {0};
@@ -569,7 +569,7 @@ void render_set_resolution(render_resolution_t res) {
 }
 
 void render_set_post_effect(render_post_effect_t post) {
-	error_if(post < 0 || post > NUM_RENDER_POST_EFFCTS, "Invalid post effect %d", post);
+	error_if(post < 0 || post > NUM_RENDER_POST_EFFECTS, "Invalid post effect %d", post);
 	prg_post = prg_post_effects[post];
 }
 

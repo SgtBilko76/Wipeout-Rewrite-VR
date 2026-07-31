@@ -115,7 +115,7 @@ void sfx_load(void) {
 	}
 
 	mem_temp_free(vb);
-	platform_set_audio_mix_cb(sfx_stero_mix);
+	platform_set_audio_mix_cb(sfx_stereo_mix);
 }
 
 void sfx_reset(void) {
@@ -311,7 +311,7 @@ void sfx_set_external_mix_cb(void (*cb)(float *, uint32_t len)) {
 	external_mix_cb = cb;
 }
 
-void sfx_stero_mix(float *buffer, uint32_t len) {
+void sfx_stereo_mix(float *buffer, uint32_t len) {
 	if (external_mix_cb) {
 		external_mix_cb(buffer, len);
 		return;

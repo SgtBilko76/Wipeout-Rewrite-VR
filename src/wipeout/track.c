@@ -56,7 +56,7 @@ void track_load(const char *base_path) {
 	section_t *s = g.track.sections;
 	section_t *j = NULL;
 
-	// Nummerate all sections; take care to give both stretches at a junction
+	// Enumerate all sections; take care to give both stretches at a junction
 	// the same numbers.
 	int num = 0;
 	do {
@@ -365,7 +365,7 @@ section_t *track_nearest_section(vec3_t pos, vec3_t bias, section_t *section, fl
 			junction = section->junction;
 		}
 
-		// Some callers of this function want to de-emphazise the .y component
+		// Some callers of this function want to de-emphasize the .y component
 		// of the difference, hence the multiplication with the bias vector.
 		// For the real, exact difference bias should be vec3(1,1,1)
 		float d = vec3_len(vec3_mul(vec3_sub(pos, section->center), bias));
