@@ -4,10 +4,8 @@
 #include "../system.h"
 #include "../platform.h"
 
-#include "object.h"
 #include "track.h"
 #include "camera.h"
-#include "object.h"
 #include "game.h"
 
 void track_load(const char *base_path) {

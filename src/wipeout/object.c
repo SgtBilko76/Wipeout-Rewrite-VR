@@ -5,15 +5,6 @@
 #include "../platform.h"
 
 #include "object.h"
-#include "track.h"
-#include "ship.h"
-#include "weapon.h"
-#include "droid.h"
-#include "camera.h"
-#include "object.h"
-#include "scene.h"
-#include "hud.h"
-#include "object.h"
 
 Object *objects_load(char *name, texture_list_t tl) {
 	uint32_t length = 0;
