@@ -1,17 +1,13 @@
-#include "../mem.h"
 #include "../input.h"
-#include "../platform.h"
 #include "../system.h"
 #include "../utils.h"
 #include "../render.h"
 
-#include "object.h"
 #include "track.h"
 #include "ship.h"
 #include "weapon.h"
 #include "droid.h"
 #include "camera.h"
-#include "object.h"
 #include "scene.h"
 #include "game.h"
 #include "hud.h"
@@ -19,7 +15,6 @@
 #include "race.h"
 #include "particle.h"
 #include "menu.h"
-#include "ship_ai.h"
 #include "ingame_menus.h"
 
 #define ATTRACT_DURATION 60.0

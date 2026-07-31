@@ -1,15 +1,9 @@
-#include "../mem.h"
-#include "../input.h"
 #include "../system.h"
 #include "../utils.h"
 
-#include "object.h"
 #include "track.h"
 #include "ship.h"
 #include "weapon.h"
-#include "hud.h"
-#include "droid.h"
-#include "camera.h"
 #include "ship_ai.h"
 #include "game.h"
 

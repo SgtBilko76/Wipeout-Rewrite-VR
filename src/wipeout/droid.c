@@ -1,18 +1,13 @@
 #include "../types.h"
-#include "../mem.h"
 #include "../system.h"
 #include "../utils.h"
 
 #include "object.h"
 #include "track.h"
 #include "ship.h"
-#include "weapon.h"
-#include "hud.h"
 #include "droid.h"
 #include "camera.h"
 #include "image.h"
-#include "scene.h"
-#include "object.h"
 #include "game.h"
 
 static Object *droid_model;

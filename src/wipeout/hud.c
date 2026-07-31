@@ -1,17 +1,11 @@
 #include "../types.h"
-#include "../mem.h"
 #include "../utils.h"
-#include "../system.h"
 
-#include "object.h"
-#include "track.h"
 #include "ship.h"
 #include "weapon.h"
 #include "hud.h"
-#include "droid.h"
 #include "camera.h"
 #include "image.h"
-#include "ship_ai.h"
 #include "game.h"
 #include "ui.h"
 

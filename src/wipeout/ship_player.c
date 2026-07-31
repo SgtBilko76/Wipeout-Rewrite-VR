@@ -1,30 +1,19 @@
 #include <stdint.h>
 #include <math.h>
 
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-
-#include "../mem.h"
-#include "object.h"
-#include "track.h"
-#include "ship.h"
-#include "weapon.h"
-#include "hud.h"
-#include "droid.h"
-#include "camera.h"
 #include "../utils.h"
-#include "scene.h"
-
-
 #include "../input.h"
 #include "../system.h"
 
+#include "track.h"
+#include "ship.h"
+#include "weapon.h"
+#include "camera.h"
+#include "scene.h"
 #include "sfx.h"
 #include "ship_player.h"
 #include "ship_ai.h"
 #include "game.h"
-#include "particle.h"
 
 void ship_player_update_sfx(ship_t *self) {
 	float speedf = self->speed * 0.000015;

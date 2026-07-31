@@ -3,16 +3,6 @@
 #include "../utils.h"
 #include "../platform.h"
 
-#include "object.h"
-#include "track.h"
-#include "ship.h"
-#include "weapon.h"
-#include "droid.h"
-#include "camera.h"
-#include "object.h"
-#include "scene.h"
-#include "game.h"
-#include "hud.h"
 #include "image.h"
 
 

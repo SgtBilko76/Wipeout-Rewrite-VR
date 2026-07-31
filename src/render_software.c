@@ -1,8 +1,6 @@
-#include "system.h"
 #include "render.h"
 #include "mem.h"
 #include "utils.h"
-#include "platform.h"
 #include "types.h"
 
 #define NEAR_PLANE 16.0

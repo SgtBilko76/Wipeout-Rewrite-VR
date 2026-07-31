@@ -6,8 +6,6 @@
 #include "../platform.h"
 
 #include "intro.h"
-#include "ui.h"
-#include "image.h"
 #include "game.h"
 
 void free_dummy(void *p) {}
