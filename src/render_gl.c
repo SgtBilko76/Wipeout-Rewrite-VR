@@ -955,8 +955,9 @@ uint16_t render_texture_create(uint32_t tw, uint32_t th, rgba_t *pixels) {
 	uint16_t texture_index = textures_len;
 	textures_len++;
 	textures[texture_index] = (render_texture_t){ {x + ATLAS_BORDER, y + ATLAS_BORDER}, {tw, th} };
-
+#ifdef VERBOSE_PRINTING
 	printf("inserted atlas texture (%3dx%3d) at (%3d,%3d)\n", tw, th, grid_x, grid_y);
+#endif
 	return texture_index;
 }
 
