@@ -370,7 +370,7 @@ void weapon_update_mine(weapon_t *self) {
 		return;
 	}
 
-	// TODO: oscilate perpendicular to track!?
+	// TODO: oscillate perpendicular to track!?
 	self->angle.y += system_tick();
 
 	ship_t *ship = weapon_collides_with_ship(self);

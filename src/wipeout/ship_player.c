@@ -412,7 +412,7 @@ void ship_player_update_race(ship_t *self) {
 			section_t *landing = self->section->prev;
 			ship_player_begin_rescue_to_section(self, landing);
 		}
-		//	Everything is normal, manouver through the air
+		//	Everything is normal, maneuver through the air
 		else {
 			float brake = (self->brake_left + self->brake_right);
 			float resistance = (self->resistance * (SHIP_MAX_RESISTANCE - (brake * 0.125))) * 0.0078125;
