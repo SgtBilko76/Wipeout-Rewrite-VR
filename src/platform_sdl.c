@@ -228,6 +228,11 @@ void platform_set_audio_mix_cb(void (*cb)(float *buffer, uint32_t len)) {
 }
 
 
+bool platform_asset_exists(const char *name) {
+	char *path = strcat(strcpy(temp_path, path_assets), name);
+	return file_exists(path);
+}
+
 FILE *platform_open_asset(const char *name, const char *mode) {
 	char *path = strcat(strcpy(temp_path, path_assets), name);
 	return fopen(path, mode);
