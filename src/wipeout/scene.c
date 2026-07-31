@@ -11,6 +11,7 @@
 #define SCENE_OIL_PUMPS_MAX 2
 #define SCENE_RED_LIGHTS_MAX 4
 #define SCENE_STANDS_MAX 20
+#define AURORA_BOREALIS_PRIMITIVES_MAX 80
 
 static Object *scene_objects;
 static Object *sky_object;
@@ -34,9 +35,9 @@ static int stands_len;
 
 static struct {
 	bool enabled;
-	GT4	*primitives[80];
-	int16_t *coords[80];
-	int16_t grey_coords[80];	
+	GT4	*primitives[AURORA_BOREALIS_PRIMITIVES_MAX];
+	int16_t *coords[AURORA_BOREALIS_PRIMITIVES_MAX];
+	int16_t grey_coords[AURORA_BOREALIS_PRIMITIVES_MAX];
 } aurora_borealis;
 
 void scene_pulsate_red_light(Object *obj);
@@ -146,12 +147,11 @@ void scene_draw(camera_t *camera) {
 
 	// Calculate the camera forward vector, so we can cull everything that's
 	// behind. Ideally we'd want to do a full frustum culling here. FIXME.
-	vec3_t cam_pos = camera->position;
 	vec3_t cam_dir = camera_forward(camera);
 	Object *object = scene_objects;
 	
 	while (object) {
-		vec3_t diff = vec3_sub(cam_pos, object->origin);
+		vec3_t diff = vec3_sub(camera->position, object->origin);
 		float cam_dot = vec3_dot(diff, cam_dir);
 		float dist_sq = vec3_dot(diff, diff);
 		if (
@@ -164,28 +164,24 @@ void scene_draw(camera_t *camera) {
 	}
 }
 
+rgba_t start_boom_color_off = rgba(0x20, 0x20, 0x20, 0xff);
+rgba_t start_boom_lights[] = {
+	rgba(0xff, 0x00, 0x00, 0xff), // Red
+	rgba(0xff, 0x80, 0x00, 0xff), // Yellow
+	rgba(0x00, 0xff, 0x00, 0xff), // Green
+};
+
 void scene_set_start_booms(int light_index) {
-	
-	int lights_len = 1;
-	rgba_t color = rgba(0, 0, 0, 0);
-	switch (light_index) {
-		case 0:
-			// reset all 3
-			lights_len = 3;
-			color = rgba(0x20, 0x20, 0x20, 0xff);
-			break;
-		case 1: color = rgba(0xff, 0x00, 0x00, 0xff); break;
-		case 2: color = rgba(0xff, 0x80, 0x00, 0xff); break;
-		case 3: color = rgba(0x00, 0xff, 0x00, 0xff); break;
-	}
 	for (int i = 0; i < start_booms_len; i++) {
 		Prm libPoly = {.primitive = start_booms[i]->primitives};
+		rgba_t color;
+		for (int j = 0; j < len(start_boom_lights); j++) {
+			if (j == light_index) {
+				color = start_boom_lights[light_index];
+			} else {
+				color = start_boom_color_off;
+			}
 
-		for (int j = 1; j < light_index; j++) {
-			libPoly.gt4 += 1;
-		}
-
-		for (int j = 0; j < lights_len; j++) {
 			for (int v = 0; v < 4; v++) {
 				libPoly.gt4->color[v] = color;
 			}
@@ -227,16 +223,12 @@ void scene_init_aurora_borealis(void) {
 			y = sky_object->vertices[coords[0]].y;
 			if (y < -6000) { // -8000
 				aurora_borealis.primitives[count] = poly.gt4;
+				aurora_borealis.coords[count] = poly.gt4->coords;
 				if (y > -6800) {
-					aurora_borealis.coords[count] = poly.gt4->coords;
 					aurora_borealis.grey_coords[count] = -1;
 				}
 				else if (y < -11000) {
-					aurora_borealis.coords[count] = poly.gt4->coords;
 					aurora_borealis.grey_coords[count] = -2;
-				}
-				else {
-					aurora_borealis.coords[count] = poly.gt4->coords;
 				}
 				count++;
 			}
@@ -257,7 +249,7 @@ rgba_t scene_aurora_color_from_coordinate(int16_t coord, float phase) {
 
 void scene_update_aurora_borealis(void) {
 	float phase = system_time() / 30.0;
-	for (int i = 0; i < 80; i++) {
+	for (int i = 0; i < AURORA_BOREALIS_PRIMITIVES_MAX; i++) {
 		int16_t *coords = aurora_borealis.coords[i];
 		GT4  *primitive = aurora_borealis.primitives[i];
 		if (aurora_borealis.grey_coords[i] != -2) {
