@@ -828,15 +828,15 @@ static int global_textures_len = 0;
 static void *global_mem_mark = 0;
 
 void game_init(void) {
-	error_if(!file_exists("wipeout/track01/"), "Wipeout game content missing. Check your wipeout/ directory.\n");
-	if (file_exists("wipeout2/track01/") || file_exists("wipeout64/track01/")) {
+	error_if(!platform_asset_exists("wipeout/track01/"), "Wipeout game content missing. Check your wipeout/ directory.\n");
+	if (platform_asset_exists("wipeout2/track01/") || platform_asset_exists("wipeout64/track01/")) {
 		g.additional_circuts = true;
 	}
 	printf("installed circuts:");
 	for (int i = 0; i < len(def.circuts); i++) {
 		g.installed_circuts[i] = true;
 		for (int o = 0; o < len(def.race_classes); o++) {
-			g.installed_circuts[i] &= file_exists(def.circuts[i].settings[o].path);
+			g.installed_circuts[i] &= platform_asset_exists(def.circuts[i].settings[o].path);
 		}
 		if (g.installed_circuts[i]) printf(" %s,", def.circuts[i].name);
 	}
