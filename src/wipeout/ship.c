@@ -59,7 +59,7 @@ void ships_init(section_t *section) {
 	}
 
 	// Randomize order for single race or new championship
-	if (g.race_type != RACE_TYPE_CHAMPIONSHIP || g.circut == CIRCUT_ALTIMA_VII) {
+	if (g.race_type != RACE_TYPE_CHAMPIONSHIP || g.circuit == CIRCUIT_ALTIMA_VII) {
 		shuffle(ranks_to_pilots, len(ranks_to_pilots));
 	}
 
@@ -81,7 +81,7 @@ void ships_init(section_t *section) {
 	}
 
 
-	int start_line_pos = def.circuts[g.circut].settings[g.race_class].start_line_pos;
+	int start_line_pos = def.circuits[g.circuit].settings[g.race_class].start_line_pos;
 	for (int i = 0; i < start_line_pos - 15; i++) {
 		section = section->next;
 	}
@@ -241,8 +241,8 @@ void ship_init(ship_t *self, section_t *section, int pilot, int inv_start_rank) 
 
 	self->section = section;
 	self->prev_section = section;
-	float spread_base = def.circuts[g.circut].settings[g.race_class].spread_base;
-	float spread_factor = def.circuts[g.circut].settings[g.race_class].spread_factor;
+	float spread_base = def.circuits[g.circuit].settings[g.race_class].spread_base;
+	float spread_factor = def.circuits[g.circuit].settings[g.race_class].spread_factor;
 	int p = inv_start_rank - 1;
 	self->start_accelerate_timer = p * (spread_base + (p * spread_factor)) * (1.0/30.0);
 
@@ -529,7 +529,7 @@ void ship_update(ship_t *self) {
 	
 	self->lap_time += system_tick();
 
-	int start_line_pos = def.circuts[g.circut].settings[g.race_class].start_line_pos;
+	int start_line_pos = def.circuits[g.circuit].settings[g.race_class].start_line_pos;
 
 	// Crossed line backwards
 	if (self->prev_section_num == start_line_pos + 1 && self->section_num <= start_line_pos) {

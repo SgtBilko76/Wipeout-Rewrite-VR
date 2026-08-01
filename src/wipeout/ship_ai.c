@@ -122,7 +122,7 @@ void ship_ai_update_race(ship_t *self) {
 		flags_rm(self->flags, SHIP_ELECTROED);
 	}
 
-	int behind_speed = def.circuts[g.circut].settings[g.race_class].behind_speed;
+	int behind_speed = def.circuits[g.circuit].settings[g.race_class].behind_speed;
 
 
 	if (flags_not(self->flags, SHIP_FLYING)) {

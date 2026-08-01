@@ -11,7 +11,7 @@
 void track_load(const char *base_path) {
 	// Load and assemble high res track tiles
 
-	bool wipeout64_mode = def.circuts[g.circut].release == GAME_WIPEOUT_64;
+	bool wipeout64_mode = def.circuits[g.circuit].release == GAME_WIPEOUT_64;
 	g.track.textures.start = render_textures_len();
 	g.track.textures.len = 0;
 
@@ -181,7 +181,7 @@ void track_load_faces(char *file_name, vec3_t *vertices) {
 
 		const vec2_t *uv;
 		rgba_t color = rgba_from_u32(get_u32(bytes, &p));
-		if (def.circuts[g.circut].release == GAME_WIPEOUT_64) {
+		if (def.circuits[g.circuit].release == GAME_WIPEOUT_64) {
 			uv = wipeout64_track_uv[flags_is(tf->flags, FACE_FLIP_TEXTURE) ? 1 : 0];
 		} else {
 			uv = track_uv[flags_is(tf->flags, FACE_FLIP_TEXTURE) ? 1 : 0];
