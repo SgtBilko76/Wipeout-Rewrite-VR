@@ -2,6 +2,7 @@
 #include "../mem.h"
 #include "../utils.h"
 #include "../platform.h"
+#include "../render.h"
 
 #include "image.h"
 
