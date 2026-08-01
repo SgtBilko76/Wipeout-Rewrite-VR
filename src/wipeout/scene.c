@@ -46,7 +46,7 @@ void scene_update_aurora_borealis(void);
 
 void scene_load(const char *base_path, float sky_y_offset) {
 	bool multiplayer = false;
-	if (def.circuts[g.circut].release == GAME_WIPEOUT_64) {
+	if (def.circuits[g.circuit].release == GAME_WIPEOUT_64) {
 		// Wipeout 64's skies appear to be rendered in a way reminiscent of
 		// Mario 64, rather than using an actual model. There is a 'sky.prm'
 		// model present in the Wipeout files, but it is a red herring - it's
