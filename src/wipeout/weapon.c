@@ -76,12 +76,12 @@ void weapons_load(void) {
 	weapon_assets.reticle = image_get_texture("wipeout/textures/target2.tim");
 
 	texture_list_t weapon_textures = image_get_compressed_textures("wipeout/common/mine.cmp");
-	weapon_assets.rocket = objects_load("wipeout/common/rock.prm", weapon_textures);
-	weapon_assets.mine = objects_load("wipeout/common/mine.prm", weapon_textures);
-	weapon_assets.missile = objects_load("wipeout/common/miss.prm", weapon_textures);
-	weapon_assets.shield = objects_load("wipeout/common/shld.prm", weapon_textures);
+	weapon_assets.rocket          = objects_load("wipeout/common/rock.prm", weapon_textures);
+	weapon_assets.mine            = objects_load("wipeout/common/mine.prm", weapon_textures);
+	weapon_assets.missile         = objects_load("wipeout/common/miss.prm", weapon_textures);
+	weapon_assets.shield          = objects_load("wipeout/common/shld.prm", weapon_textures);
 	weapon_assets.shield_internal = objects_load("wipeout/common/shld.prm", weapon_textures);
-	weapon_assets.ebolt = objects_load("wipeout/common/ebolt.prm", weapon_textures);
+	weapon_assets.ebolt           = objects_load("wipeout/common/ebolt.prm", weapon_textures);
 
 	// Invert shield polys for internal view
 	Prm poly = {.primitive = weapon_assets.shield_internal->primitives};
@@ -272,9 +272,9 @@ ship_t *weapon_collides_with_ship(weapon_t *self) {
 
 		float distance = vec3_len(vec3_sub(ship->position, self->position));
 		if (distance < 512) {
+			vec3_t base_vel = vec3_mulf(ship->velocity, 0.25);
 			for (int p = 0; p < 32; p++) {
-				vec3_t velocity = vec3_rand(512);
-				velocity = vec3_add(velocity, vec3_mulf(ship->velocity, 0.25));
+				vec3_t velocity = vec3_add(base_vel, vec3_rand(512));
 				particles_spawn(self->position, self->ship_hit_particle, velocity, 256);
 			}
 			return ship;
@@ -471,7 +471,7 @@ void weapon_update_rocket(weapon_t *self) {
 
 		if (flags_not(ship->flags, SHIP_SHIELDED)) {
 			if (ship->pilot == g.pilot) {
-				ship->velocity = vec3_sub(ship->velocity, vec3_mulf(ship->velocity, 0.75));
+				ship->velocity = vec3_mulf(ship->velocity, 0.25);
 				ship->angular_velocity.z += rand_float(-0.1, 0.1);;
 				ship->turn_rate_from_hit = rand_float(-0.1, 0.1);;
 				camera_set_shake(&g.camera, CAMERA_SHAKE_LONG);
@@ -559,42 +559,31 @@ void weapon_update_shield(weapon_t *self) {
 	}
 	self->angle = self->owner->angle;
 
-
+	// Animated colors.
 	Prm poly = {.primitive = self->model->primitives};
 	int primitives_len = self->model->primitives_len;
-	uint8_t col0, col1, col2, col3;
+	uint8_t col;
 	int16_t *coords;
-	uint8_t shield_alpha = 48;
+	const uint8_t shield_alpha = 48;
 
-	// FIXME: this looks kinda close to the PSX original!?
 	float color_timer = self->timer * 0.05;
 	for (int k = 0; k < primitives_len; k++) {
 		switch (poly.primitive->type) {
 		case PRM_TYPE_G3 :
 			coords = poly.g3->coords;
-
-			col0 = sinf(color_timer * coords[0]) * 127 + 128;
-			col1 = sinf(color_timer * coords[1]) * 127 + 128;
-			col2 = sinf(color_timer * coords[2]) * 127 + 128;
-
-			poly.g3->color[0] = rgba(col0, col0, 255, shield_alpha);
-			poly.g3->color[1] = rgba(col1, col1, 255, shield_alpha);
-			poly.g3->color[2] = rgba(col2, col2, 255, shield_alpha);
+			for (int v = 0; v < 3; v++) {
+				col = sinf(color_timer * coords[v]) * 127 + 128;
+				poly.g3->color[v] = rgba(col, col, 255, shield_alpha);
+			}
 			poly.g3 += 1;
 			break;
 
 		case PRM_TYPE_G4 :
 			coords = poly.g4->coords;
-
-			col0 = sinf(color_timer * coords[0]) * 127 + 128;
-			col1 = sinf(color_timer * coords[1]) * 127 + 128;
-			col2 = sinf(color_timer * coords[2]) * 127 + 128;
-			col3 = sinf(color_timer * coords[3]) * 127 + 128;
-
-			poly.g4->color[0] = rgba(col0, col0, 255, shield_alpha);
-			poly.g4->color[1] = rgba(col1, col1, 255, shield_alpha);
-			poly.g4->color[2] = rgba(col2, col2, 255, shield_alpha);
-			poly.g4->color[3] = rgba(col3, col3, 255, shield_alpha);
+			for (int v = 0; v < 4; v++) {
+				col = sinf(color_timer * coords[v]) * 127 + 128;
+				poly.g4->color[v] = rgba(col, col, 255, shield_alpha);
+			}
 			poly.g4 += 1;
 			break;
 		}
