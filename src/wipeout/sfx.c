@@ -9,6 +9,8 @@
 #define QOA_NO_STDIO
 #include <qoa.h>
 
+#define DOPPLER_SHIFT_INTENSITY (1.0/524288.0)
+
 typedef struct {
 	int16_t *samples;
 	uint32_t len;
@@ -219,7 +221,7 @@ void sfx_set_position(sfx_t *sfx, vec3_t pos, vec3_t vel, float volume) {
 
 	// Doppler effect
 	float away = vec3_dot(relative_velocity, relative_position) / distance;
-	sfx->pitch = (262144.0 - away) / 524288.0;
+	sfx->pitch = 0.5 - (away * DOPPLER_SHIFT_INTENSITY);
 }
 
 
