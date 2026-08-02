@@ -382,28 +382,17 @@ static void page_options_highscores_viewer_input_handler() {
 	else if (input_pressed(A_MENU_DOWN)) {
 		options_highscores_race_class++;
 	}
+	options_highscores_race_class = wrap_around(options_highscores_race_class, 0, NUM_RACE_CLASSES);
+
 	if (input_pressed(A_MENU_LEFT)) {
 		do {
-			options_highscores_circuit--;
-			if (options_highscores_circuit < 0) {
-				options_highscores_circuit = NUM_CIRCUITS - 1;
-			}
+			options_highscores_circuit = wrap_around(options_highscores_circuit - 1, 0, NUM_CIRCUITS);
 		} while (!g.installed_circuits[options_highscores_circuit]);
 	}
 	else if (input_pressed(A_MENU_RIGHT)) {
 		do {
-			options_highscores_circuit++;
-			if (options_highscores_circuit >= NUM_CIRCUITS) {
-				options_highscores_circuit = 0;
-			}
+			options_highscores_circuit = wrap_around(options_highscores_circuit + 1, 0, NUM_CIRCUITS);
 		} while (!g.installed_circuits[options_highscores_circuit]);
-	}
-
-	if (options_highscores_race_class >= NUM_RACE_CLASSES) {
-		options_highscores_race_class = 0;
-	}
-	if (options_highscores_race_class < 0) {
-		options_highscores_race_class = NUM_RACE_CLASSES - 1;
 	}
 
 	if ((last_race_class_index != options_highscores_race_class) ||

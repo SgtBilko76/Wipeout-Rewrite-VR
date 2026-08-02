@@ -331,13 +331,7 @@ static void hall_of_fame_draw_name_entry(menu_t *menu, ui_pos_t anchor, vec2i_t 
 	else if (input_pressed(A_MENU_DOWN)) {
 		hs_char_index--;
 	}
-
-	if (hs_char_index < c_first) {
-		hs_char_index = c_last-1;
-	}
-	if (hs_char_index >= c_last) {
-		hs_char_index = c_first;
-	}
+	hs_char_index = wrap_around(hs_char_index, c_first, c_last);
 
 	// DEL
 	if (hs_char_index == 36) {
