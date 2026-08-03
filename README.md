@@ -274,7 +274,6 @@ Some things from the original game are not yet implemented in this rewrite. This
 - the scene geometry could use some touch-ups to make an infinite draw distance option less awkward
 - increase FOV when going over a boost
 - better menu models for game exit and video options
-- gamepad analog input feels like balancing an egg
 - fix collision issues on junctions (also present in the original)
 
 ## Technical
