@@ -264,6 +264,8 @@ void ship_init(ship_t *self, section_t *section, int pilot, int inv_start_rank) 
 	self->angle.y = -atan2(direction.x, direction.z);
 }
 
+const rgba_t exhaust_plume_color = rgba(180,97,120,140);
+
 void ship_init_exhaust_plume(ship_t *self) {
 	int16_t indices[64];
 	int16_t indices_len = 0;
@@ -271,78 +273,44 @@ void ship_init_exhaust_plume(ship_t *self) {
 	Prm prm = {.primitive = self->model->primitives};
 
 	for (int i = 0; i < self->model->primitives_len; i++) {
-		switch (prm.f3->type) {
-		case PRM_TYPE_F3 :
-			if (flags_is(prm.f3->flag, PRM_SHIP_ENGINE)) {
-				die("F3 ::SE marked polys should be ft3's");
-			}
-			prm.f3 += 1;
-			break;
+		if (flags_is(prm.primitive->flag, PRM_SHIP_ENGINE)) {
+			flags_add(prm.primitive->flag, PRM_TRANSLUCENT);
 
-		case PRM_TYPE_F4 :
-			if (flags_is(prm.f4->flag, PRM_SHIP_ENGINE)) {
-				die("F4 ::SE marked polys should be ft3's");
-			}
-			prm.f4 += 1;
-			break;
-
-		case PRM_TYPE_FT3 :
-			if (flags_is(prm.ft3->flag, PRM_SHIP_ENGINE)) {
+			switch (prm.primitive->type) {
+			case PRM_TYPE_FT3:
 				indices[indices_len++] = prm.ft3->coords[0];
 				indices[indices_len++] = prm.ft3->coords[1];
 				indices[indices_len++] = prm.ft3->coords[2];
 
-				flags_add(prm.ft3->flag, PRM_TRANSLUCENT);
-				prm.ft3->color = rgba(180,97,120,140);
-			}
-			prm.ft3 += 1;
-			break;
-
-		case PRM_TYPE_FT4 :
-			if (flags_is(prm.ft4->flag, PRM_SHIP_ENGINE)) {
-				die("FT4 ::SE marked polys should be ft3's");
-			}
-			prm.ft4 += 1;
-			break;
-
-		case PRM_TYPE_G3 :
-			if (flags_is(prm.g3->flag, PRM_SHIP_ENGINE)) {
-				die("G3 ::SE marked polys should be ft3's");
-			}
-			prm.g3 += 1;
-			break;
-
-		case PRM_TYPE_G4 :
-			if (flags_is(prm.g4->flag, PRM_SHIP_ENGINE)) {
-				die("G4 ::SE marked polys should be ft3's");
-			}
-			prm.g4 += 1;
-			break;
-
-		case PRM_TYPE_GT3 :
-			if (flags_is(prm.gt3->flag, PRM_SHIP_ENGINE)) {
+				prm.ft3->color = exhaust_plume_color;
+				prm.ft3++;
+				break;
+			case PRM_TYPE_GT3:
 				indices[indices_len++] = prm.gt3->coords[0];
 				indices[indices_len++] = prm.gt3->coords[1];
 				indices[indices_len++] = prm.gt3->coords[2];
 
-				flags_add(prm.gt3->flag, PRM_TRANSLUCENT);
 				for (int j = 0; j < 3; j++) {
-					prm.gt3->color[j] = rgba(180,97,120,140);
+					prm.gt3->color[j] = exhaust_plume_color;
 				}
+				prm.gt3++;
+				break;
+			default:
+				die("Primitive type %x is marked as an engine primitive but is not ft3 or gt3\n", prm.primitive->type);
 			}
-			prm.gt3 += 1;
-			break;
-
-		case PRM_TYPE_GT4 :
-			if (flags_is(prm.gt4->flag, PRM_SHIP_ENGINE)) {
-				die("GT4 ::SE marked polys should be ft3's");
+		} else {
+			switch (prm.primitive->type) {
+			case PRM_TYPE_F3: prm.f3++; break;
+			case PRM_TYPE_F4: prm.f4++; break;
+			case PRM_TYPE_FT3: prm.ft3++; break;
+			case PRM_TYPE_FT4: prm.ft4++; break;
+			case PRM_TYPE_G3: prm.g3++; break;
+			case PRM_TYPE_G4: prm.g4++; break;
+			case PRM_TYPE_GT3: prm.gt3++; break;
+			case PRM_TYPE_GT4: prm.gt4++; break;
+			default:
+				die("Bad primitive type %x\n", prm.primitive->type);
 			}
-			prm.gt4 += 1;
-			break;
-
-		default :
-			die("cone.c::InitCone:Bad primitive type %x\n", prm.f3->type);
-			break;
 		}
 	}
 
@@ -361,16 +329,15 @@ void ship_init_exhaust_plume(ship_t *self) {
 			if (indices[i] == indices[j]) {
 				similar++;
 				if (similar > 3) {
-					int found = 0;
+					bool found = false;
 					for (int k = 0; k < 3; k++) {
 						if (shared[k] == indices[i]) {
-							found = 1;
+							found = true;
 						}
 					}
 
 					if (!found) {
-						shared[booster] = indices[i];
-						booster++;
+						shared[booster++] = indices[i];
 					}
 				}
 			}
@@ -412,21 +379,9 @@ void ship_draw_shadow(ship_t *self) {
 	rgba_t color = rgba(0 , 0 , 0, 128);
 	render_push_tris((tris_t) {
 		.vertices = {
-			{
-				.pos = {wngl.x, wngl.y, wngl.z},
-				.uv = {0, 256},
-				.color = color,
-			},
-			{
-				.pos = {wngr.x, wngr.y, wngr.z},
-				.uv = {128, 256},
-				.color = color
-			},
-			{
-				.pos = {nose.x, nose.y, nose.z},
-				.uv = {64, 0},
-				.color = color
-			},
+			{.pos = wngl, .uv = {0, 256},   .color = color},
+			{.pos = wngr, .uv = {128, 256}, .color = color},
+			{.pos = nose, .uv = {64, 0},    .color = color},
 		}
 	}, self->shadow_texture);
 }
@@ -513,10 +468,11 @@ void ship_update(ship_t *self) {
 	}
 
 	for (int i = 0; i < 3; i++) {
-		if (self->exhaust_plume[i].v != NULL) {
-			self->exhaust_plume[i].v->z = self->exhaust_plume[i].initial.z - exhaust_len + (rand_int(-16383, 16383) >> 9);
-			self->exhaust_plume[i].v->x = self->exhaust_plume[i].initial.x + (rand_int(-16383, 16383) >> 11);
-			self->exhaust_plume[i].v->y = self->exhaust_plume[i].initial.y + (rand_int(-16383, 16383) >> 11);
+		if (self->exhaust_plume[i].v) {
+			vec3_t jitter = vec3_rand(7);
+			jitter.z *= 4;
+			*self->exhaust_plume[i].v = vec3_add(self->exhaust_plume[i].initial, jitter);
+			self->exhaust_plume[i].v->z -= exhaust_len;
 		}
 	}
 

@@ -10,6 +10,7 @@
 
 typedef struct Primitive {
 	int16_t type; // Type of Primitive
+	int16_t flag;
 } Primitive;
 
 
@@ -296,36 +297,37 @@ typedef struct InfiniteLight {
 #define PRM_SHIP_ENGINE  0x0002
 #define PRM_TRANSLUCENT  0x0004
 
+// Altering this enum (other than adding to the end)
+// will break compatibility with the assets.
+enum {
+	PRM_TYPE_F3 = 1,
+	PRM_TYPE_FT3,
+	PRM_TYPE_F4,
+	PRM_TYPE_FT4,
+	PRM_TYPE_G3,
+	PRM_TYPE_GT3,
+	PRM_TYPE_G4,
+	PRM_TYPE_GT4,
 
+	PRM_TYPE_LF2,
+	PRM_TYPE_TSPR,
+	PRM_TYPE_BSPR,
 
-#define PRM_TYPE_F3               1
-#define PRM_TYPE_FT3              2
-#define PRM_TYPE_F4               3
-#define PRM_TYPE_FT4              4
-#define PRM_TYPE_G3               5
-#define PRM_TYPE_GT3              6
-#define PRM_TYPE_G4               7
-#define PRM_TYPE_GT4              8
+	PRM_TYPE_LSF3,
+	PRM_TYPE_LSFT3,
+	PRM_TYPE_LSF4,
+	PRM_TYPE_LSFT4,
+	PRM_TYPE_LSG3,
+	PRM_TYPE_LSGT3,
+	PRM_TYPE_LSG4,
+	PRM_TYPE_LSGT4,
 
-#define PRM_TYPE_LF2              9
-#define PRM_TYPE_TSPR             10
-#define PRM_TYPE_BSPR             11
+	PRM_TYPE_SPLINE,
 
-#define PRM_TYPE_LSF3             12
-#define PRM_TYPE_LSFT3            13
-#define PRM_TYPE_LSF4             14
-#define PRM_TYPE_LSFT4            15
-#define PRM_TYPE_LSG3             16
-#define PRM_TYPE_LSGT3            17
-#define PRM_TYPE_LSG4             18
-#define PRM_TYPE_LSGT4            19
-
-#define PRM_TYPE_SPLINE           20
-
-#define PRM_TYPE_INFINITE_LIGHT    21
-#define PRM_TYPE_POINT_LIGHT       22
-#define PRM_TYPE_SPOT_LIGHT        23
-
+	PRM_TYPE_INFINITE_LIGHT,
+	PRM_TYPE_POINT_LIGHT,
+	PRM_TYPE_SPOT_LIGHT,
+};
 
 typedef struct Object {
 	char name[16];
