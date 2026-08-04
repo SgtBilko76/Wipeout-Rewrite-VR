@@ -69,9 +69,7 @@ vec3_t vec3_rand(float maxlen) {
 }
 
 void mat4_set_translation(mat4_t *mat, vec3_t pos) {
-	mat->cols[3][0] = pos.x;
-	mat->cols[3][1] = pos.y;
-	mat->cols[3][2] = pos.z;
+	mat->basis.translation.vec3 = pos;
 }
 
 void mat4_set_yaw_pitch_roll(mat4_t *mat, vec3_t rot) {
