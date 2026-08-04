@@ -1,3 +1,4 @@
+#include "platform.h"
 #include "render.h"
 #include "mem.h"
 #include "utils.h"
