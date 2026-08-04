@@ -53,9 +53,7 @@ vec3_t vec3_project_to_ray(vec3_t p, vec3_t r0, vec3_t r1) {
 }
 
 float vec3_distance_to_plane(vec3_t p, vec3_t plane_pos, vec3_t plane_normal) {
-	float dot_product = vec3_dot(vec3_sub(plane_pos, p), plane_normal);
-	float norm_dot_product = vec3_dot(vec3_mulf(plane_normal, -1), plane_normal);
-	return dot_product / norm_dot_product;
+	return -vec3_dot(vec3_sub(plane_pos, p), plane_normal);
 }
 
 vec3_t vec3_reflect(vec3_t incidence, vec3_t normal, float f) {
