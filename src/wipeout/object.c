@@ -68,17 +68,9 @@ Object *objects_load(char *name, texture_list_t tl) {
 			object->vertices[i].z = get_i16(bytes, &p);
 			p += 2; // padding
 
-			if (fabsf(object->vertices[i].x) > object->radius) {
-				object->radius = fabsf(object->vertices[i].x);
-			}
-			if (fabsf(object->vertices[i].y) > object->radius) {
-				object->radius = fabsf(object->vertices[i].y);
-			}
-			if (fabsf(object->vertices[i].z) > object->radius) {
-				object->radius = fabsf(object->vertices[i].z);
-			}
+			object->radius = max(vec3_len_sq(object->vertices[i]), object->radius);
 		}
-
+		object->radius = sqrt(object->radius);
 
 
 		object->normals = mem_bump(object->normals_len * sizeof(vec3_t));
