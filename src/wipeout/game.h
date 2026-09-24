@@ -302,6 +302,7 @@ extern save_t save;
 
 void game_init(void);
 void game_set_scene(game_scene_t scene);
+game_scene_t game_get_scene(void);
 void game_reset_championship(void);
 void game_update(void);
 

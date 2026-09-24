@@ -222,13 +222,41 @@ The following is a table for project specific build flags using CMake:
 
 | Flag             | Description                                                                             | Options                                                                                                                 | Default                                                                                     |
 |------------------|-----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| `PLATFORM`       | The platform to build for.                                                              | `SDL2`, `SOKOL`, `NULL` for a dummy implementation.                                                                     | `SDL2`                                                                                      |
-| `RENDERER`       | Graphics renderer.                                                                      | `GL` for OpenGL 3, `GLES2` for OpenGL ES 2, `SOFTWARE` for a pure software renderer, `NULL` for a dummy implementation. | `GL`                                                                                        |
+| `PLATFORM`       | The platform to build for.                                                              | `SDL2`, `SOKOL`, `QUEST` (Android/OpenXR, see below), `NULL` for a dummy implementation.                                | `SDL2`                                                                                      |
+| `RENDERER`       | Graphics renderer.                                                                      | `GL` for OpenGL 3, `GLES2` for OpenGL ES 2, `SOFTWARE` for a pure software renderer, `VR` for OpenGL ES 3 stereo (`QUEST` only), `NULL` for a dummy implementation. | `GL`                                                                                        |
 | `USE_GLVND`      | Link against the OpenGL Vendor Neutral Dispatch libraries.                              | `ON`, `OFF`                                                                                                             | `ON`, falling back to `OFF` if the libraries aren't found or an OpenGL renderer isn't used. |
 | `MINIMAL_BUNDLE` | Do not include the music/intro video when building for the web.                         | `ON`, `OFF`                                                                                                             | `OFF`                                                                                       |
 | `PATH_ASSETS`    | Set a static path where the game assets are loaded from.                                | Any valid filesystem path.                                                                                              | Unset                                                                                       |
 | `PATH_USERDATA`  | Set a static path where user data (e.g. game saves) are stored.                         | Any valid filesystem path.                                                                                              | Unset                                                                                       |
 | `DEV_BUILD`      | Sets the assets/userdata path to the source directory. Useful when testing any changes. | `ON`, `OFF`                                                                                                             | `OFF`                                                                                       |
+
+## Meta Quest (VR)
+
+A standalone build for Meta Quest 2/3/3S/Pro headsets (arm64, OpenXR). Races
+are rendered in stereo 3D with head tracking and the HUD on a floating panel;
+the intro, title and menus are shown on a large virtual screen.
+
+Requirements: the Android SDK with an NDK, build-tools and a platform (API
+32+), CMake, Ninja and a JDK. The OpenXR loader is downloaded from Maven
+Central on the first build. Set `ANDROID_HOME` if the SDK isn't in
+`~/Android/Sdk`.
+
+```sh
+# Build build/android/wipeout-quest-<version>.apk and install it via adb
+android/build.sh install
+
+# Copy the game data from ./wipeout/ (see Running) to the headset
+android/push_data.sh
+```
+
+The game data lives in `/sdcard/Android/data/org.phoboslab.wipeout/files/wipeout/`
+on the headset. Directories created there through adb are not readable by the
+game, so `push_data.sh` sends a single `wipeout.tar`, which the game unpacks
+on its next start.
+
+Default controls on the Touch controllers: left stick to steer, right trigger
+to thrust, left trigger to fire, grips for the airbrakes, Y to change the view,
+menu button to pause, A/B to select/go back in menus.
 
 # Running
 

@@ -597,6 +597,18 @@ save_t save = {
 	.has_bonus_circuits = true, // for testing; should be false in prod
 
 	.buttons = {
+#if defined(__ANDROID__)
+		// Touch controllers have no dpad: steer with the left stick, triggers
+		// for thrust/fire, grips for airbrakes
+		[A_UP] = {INPUT_KEY_UP, INPUT_GAMEPAD_L_STICK_UP},
+		[A_DOWN] = {INPUT_KEY_DOWN, INPUT_GAMEPAD_L_STICK_DOWN},
+		[A_LEFT] = {INPUT_KEY_LEFT, INPUT_GAMEPAD_L_STICK_LEFT},
+		[A_RIGHT] = {INPUT_KEY_RIGHT, INPUT_GAMEPAD_L_STICK_RIGHT},
+		[A_BRAKE_LEFT] = {INPUT_KEY_C, INPUT_GAMEPAD_L_SHOULDER},
+		[A_BRAKE_RIGHT] = {INPUT_KEY_V, INPUT_GAMEPAD_R_SHOULDER},
+		[A_THRUST] = {INPUT_KEY_X, INPUT_GAMEPAD_R_TRIGGER},
+		[A_FIRE] = {INPUT_KEY_Z, INPUT_GAMEPAD_L_TRIGGER},
+#else
 		[A_UP] = {INPUT_KEY_UP, INPUT_GAMEPAD_DPAD_UP},
 		[A_DOWN] = {INPUT_KEY_DOWN, INPUT_GAMEPAD_DPAD_DOWN},
 		[A_LEFT] = {INPUT_KEY_LEFT, INPUT_GAMEPAD_DPAD_LEFT},
@@ -605,6 +617,7 @@ save_t save = {
 		[A_BRAKE_RIGHT] = {INPUT_KEY_V, INPUT_GAMEPAD_R_SHOULDER},
 		[A_THRUST] = {INPUT_KEY_X, INPUT_GAMEPAD_A},
 		[A_FIRE] = {INPUT_KEY_Z, INPUT_GAMEPAD_X},
+#endif
 		[A_CHANGE_VIEW] = {INPUT_KEY_A, INPUT_GAMEPAD_Y},
 	},
 	.analog_response = 2, // Exponent for stick turn input
@@ -934,6 +947,10 @@ void game_init(void) {
 void game_set_scene(game_scene_t scene) {
 	sfx_reset();
 	scene_next = scene;
+}
+
+game_scene_t game_get_scene(void) {
+	return scene_current;
 }
 
 void game_reset_championship(void) {

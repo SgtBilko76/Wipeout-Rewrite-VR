@@ -288,6 +288,13 @@ void sfx_music_open(char *path) {
 
 void sfx_music_play(uint32_t index) {
 	error_if(index >= len(def.music), "Invalid music index");
+
+	// Not every version of the game comes with all tracks (the PSX disc
+	// has 8 of 11); fall back to the next one that exists.
+	for (int i = 0; i < len(def.music) && !platform_asset_exists(def.music[index].path); i++) {
+		index = (index + 1) % len(def.music);
+	}
+
 	if (index == music->track_index) {
 		sfx_music_rewind();
 		return;

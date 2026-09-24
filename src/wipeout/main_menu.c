@@ -37,6 +37,10 @@ static struct {
 } models;
 
 static void draw_model(Object *model, vec2_t offset, vec3_t pos, float rotation) {
+	// Models from the PC version may be missing
+	if (!model) {
+		return;
+	}
 	render_set_view(vec3(0,0,0), vec3(0, -M_PI, -M_PI));
 	render_set_screen_position(offset);
 	mat4_t mat = mat4_identity();
@@ -671,13 +675,20 @@ void main_menu_init(void) {
 	background = image_get_texture("wipeout/textures/wipeout1.tim");
 	track_images = image_get_compressed_textures("wipeout/textures/track.cmp");
 
-	objects_unpack(models.race_classes, objects_load("wipeout/common/leeg.prm", image_get_compressed_textures("wipeout/common/leeg.cmp")));
+	// leeg and msdos only come with the PC version; the menu works without them
+	memset(&models.race_classes, 0, sizeof(models.race_classes));
+	memset(&models.misc, 0, sizeof(models.misc));
+	if (platform_asset_exists("wipeout/common/leeg.prm")) {
+		objects_unpack(models.race_classes, objects_load("wipeout/common/leeg.prm", image_get_compressed_textures("wipeout/common/leeg.cmp")));
+	}
 	objects_unpack(models.teams, objects_load("wipeout/common/teams.prm", texture_list_empty()));
 	objects_unpack(models.pilots, objects_load("wipeout/common/pilot.prm", image_get_compressed_textures("wipeout/common/pilot.cmp")));
 	objects_unpack(models.options, objects_load("wipeout/common/alopt.prm", image_get_compressed_textures("wipeout/common/alopt.cmp")));
 	objects_unpack(models.rescue, objects_load("wipeout/common/rescu.prm", image_get_compressed_textures("wipeout/common/rescu.cmp")));
 	objects_unpack(models.controller, objects_load("wipeout/common/pad1.prm", image_get_compressed_textures("wipeout/common/pad1.cmp")));
-	objects_unpack(models.misc, objects_load("wipeout/common/msdos.prm", image_get_compressed_textures("wipeout/common/msdos.cmp")));
+	if (platform_asset_exists("wipeout/common/msdos.prm")) {
+		objects_unpack(models.misc, objects_load("wipeout/common/msdos.prm", image_get_compressed_textures("wipeout/common/msdos.cmp")));
+	}
 
 	menu_reset(main_menu);
 	page_main_init(main_menu);

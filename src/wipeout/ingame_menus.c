@@ -4,6 +4,7 @@
 #include "../system.h"
 #include "../utils.h"
 #include "../mem.h"
+#include "../platform.h"
 
 #include "menu.h"
 #include "ingame_menus.h"
@@ -81,7 +82,9 @@ static void button_music(menu_t *menu, int data) {
 	menu_page_t *page = menu_push(menu, "MUSIC", NULL);
 
 	for (int i = 0; i < len(def.music); i++) {
-		menu_page_add_button(page, i, def.music[i].name, button_music_track);
+		if (platform_asset_exists(def.music[i].path)) {
+			menu_page_add_button(page, i, def.music[i].name, button_music_track);
+		}
 	}
 	menu_page_add_button(page, 0, "RANDOM", button_music_random);
 }
