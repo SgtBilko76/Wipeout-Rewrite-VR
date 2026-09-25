@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="org.phoboslab.wipeout"
+	package="online.portroyale.wipeoutrewritevr"
 	android:versionCode="1"
 	android:versionName="0.1.0-beta1"
 	android:installLocation="auto">
@@ -18,7 +18,7 @@
 	</queries>
 
 	<application
-		android:label="wipEout"
+		android:label="Wipeout Rewrite VR"
 		android:hasCode="false"
 		android:allowBackup="false"
 		android:extractNativeLibs="true">

@@ -8,7 +8,7 @@
 #
 #   android/build.sh [quest|pico] [install]
 #
-# builds build/android/wipeout-<headset>-<version>.apk (default: quest) and
+# builds build/android/WipeoutRewriteVR-<version>-<headset>.apk (default: quest) and
 # optionally installs it via adb.
 
 set -euo pipefail
@@ -35,7 +35,7 @@ OPENXR_VERSION=1.1.63
 OPENXR_DIR="$OUT/openxr_loader-$OPENXR_VERSION"
 ABI=arm64-v8a
 VERSION="$(sed -n 's/.*android:versionName="\([^"]*\)".*/\1/p' "$MANIFEST")"
-APK="$OUT/wipeout-$HEADSET-$VERSION.apk"
+APK="$OUT/WipeoutRewriteVR-$VERSION-$HEADSET.apk"
 
 mkdir -p "$OUT"
 

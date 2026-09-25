@@ -1,3 +1,18 @@
+# Wipeout Rewrite VR
+
+A standalone VR port of [wipEout Rewrite](https://github.com/phoboslab/wipeout-rewrite)
+for Meta Quest and PICO headsets. Races are rendered in stereo 3D with head
+tracking, the HUD floats in front of you, and the menus are shown on a large
+virtual screen. See [Wipeout Rewrite VR: Meta Quest and PICO](#wipeout-rewrite-vr-meta-quest-and-pico)
+for building and installing.
+
+**The game data is not included.** You need the data from your own copy of
+the PSX NTSC version of wipEout (see [Running](#running)).
+
+The original README follows.
+
+---
+
 # wipEout Rewrite
 
 This is a re-implementation of the 1995 PSX game wipEout.
@@ -230,7 +245,7 @@ The following is a table for project specific build flags using CMake:
 | `PATH_USERDATA`  | Set a static path where user data (e.g. game saves) are stored.                         | Any valid filesystem path.                                                                                              | Unset                                                                                       |
 | `DEV_BUILD`      | Sets the assets/userdata path to the source directory. Useful when testing any changes. | `ON`, `OFF`                                                                                                             | `OFF`                                                                                       |
 
-## Meta Quest and PICO (VR)
+## Wipeout Rewrite VR: Meta Quest and PICO
 
 A standalone build for Meta Quest 2/3/3S/Pro and PICO 4/4 Ultra/Neo3 headsets
 (arm64, OpenXR). Both use the same native code; only the Android manifest
@@ -244,7 +259,7 @@ Central on the first build. Set `ANDROID_HOME` if the SDK isn't in
 `~/Android/Sdk`.
 
 ```sh
-# Build build/android/wipeout-<headset>-<version>.apk and install it via adb
+# Build build/android/WipeoutRewriteVR-<version>-<headset>.apk and install it via adb
 android/build.sh quest install
 android/build.sh pico install
 
@@ -252,7 +267,7 @@ android/build.sh pico install
 android/push_data.sh
 ```
 
-The game data lives in `/sdcard/Android/data/org.phoboslab.wipeout/files/wipeout/`
+The game data lives in `/sdcard/Android/data/online.portroyale.wipeoutrewritevr/files/wipeout/`
 on the headset. Directories created there through adb are not readable by the
 game, so `push_data.sh` sends a single `wipeout.tar`, which the game unpacks
 on its next start.

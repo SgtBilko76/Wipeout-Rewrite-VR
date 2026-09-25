@@ -6,7 +6,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PACKAGE=org.phoboslab.wipeout
+PACKAGE=online.portroyale.wipeoutrewritevr
 DEST="/sdcard/Android/data/$PACKAGE/files"
 TAR="$ROOT/build/android/wipeout.tar"
 

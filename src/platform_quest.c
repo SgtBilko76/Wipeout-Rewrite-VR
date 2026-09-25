@@ -975,7 +975,7 @@ void android_main(struct android_app *app) {
 	log_redirect_stdout();
 
 	// Game data lives in the app's external files dir, e.g.
-	// /sdcard/Android/data/org.phoboslab.wipeout/files/wipeout/
+	// /sdcard/Android/data/online.portroyale.wipeoutrewritevr/files/wipeout/
 	const char *files_dir = app->activity->externalDataPath;
 	path_assets = mem_bump(strlen(files_dir) + 2);
 	strcpy(path_assets, files_dir);
