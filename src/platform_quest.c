@@ -89,6 +89,7 @@ static XrSpace xr_local_space = XR_NULL_HANDLE;
 static XrSessionState xr_session_state = XR_SESSION_STATE_UNKNOWN;
 static bool xr_session_running = false;
 static bool xr_has_refresh_rate = false;
+static bool xr_has_bd_controllers = false;
 static XrViewConfigurationView xr_config_views[2];
 static swapchain_t eye_swapchains[2];
 static swapchain_t screen_swapchain;
@@ -423,7 +424,7 @@ static void platform_xr_create_instance(void) {
 	}
 	xr_check(xrEnumerateInstanceExtensionProperties(NULL, ext_len, &ext_len, ext_props), "enumerate extensions");
 
-	const char *extensions[4];
+	const char *extensions[8];
 	uint32_t extensions_len = 0;
 	extensions[extensions_len++] = XR_KHR_ANDROID_CREATE_INSTANCE_EXTENSION_NAME;
 	extensions[extensions_len++] = XR_KHR_OPENGL_ES_ENABLE_EXTENSION_NAME;
@@ -431,6 +432,10 @@ static void platform_xr_create_instance(void) {
 	if (xr_has_extension(ext_props, ext_len, XR_FB_DISPLAY_REFRESH_RATE_EXTENSION_NAME)) {
 		extensions[extensions_len++] = XR_FB_DISPLAY_REFRESH_RATE_EXTENSION_NAME;
 		xr_has_refresh_rate = true;
+	}
+	if (xr_has_extension(ext_props, ext_len, XR_BD_CONTROLLER_INTERACTION_EXTENSION_NAME)) {
+		extensions[extensions_len++] = XR_BD_CONTROLLER_INTERACTION_EXTENSION_NAME;
+		xr_has_bd_controllers = true;
 	}
 	mem_temp_free(ext_props);
 
@@ -674,15 +679,33 @@ static void platform_xr_create_actions(void) {
 		xr_check(xrStringToPath(xr_instance, qa->path, &bindings[i].binding), "xrStringToPath %s", qa->path);
 	}
 
-	XrPath profile;
-	xr_check(xrStringToPath(xr_instance, "/interaction_profiles/oculus/touch_controller", &profile), "profile path");
-	XrInteractionProfileSuggestedBinding suggested = {
-		.type = XR_TYPE_INTERACTION_PROFILE_SUGGESTED_BINDING,
-		.interactionProfile = profile,
-		.countSuggestedBindings = len(quest_actions),
-		.suggestedBindings = bindings,
+	// Meta Touch and Pico controllers have the same buttons under the same
+	// paths. Profiles the runtime doesn't know are rejected; that's fine as
+	// long as one of them is accepted.
+	const char *profiles[] = {
+		"/interaction_profiles/oculus/touch_controller",
+		"/interaction_profiles/bytedance/pico4_controller",
+		"/interaction_profiles/bytedance/pico4s_controller",
+		"/interaction_profiles/bytedance/pico_neo3_controller",
 	};
-	xr_check(xrSuggestInteractionProfileBindings(xr_instance, &suggested), "suggest bindings");
+	int profiles_len = xr_has_bd_controllers ? len(profiles) : 1;
+	int profiles_accepted = 0;
+	for (int i = 0; i < profiles_len; i++) {
+		XrPath profile;
+		xr_check(xrStringToPath(xr_instance, profiles[i], &profile), "profile path");
+		XrInteractionProfileSuggestedBinding suggested = {
+			.type = XR_TYPE_INTERACTION_PROFILE_SUGGESTED_BINDING,
+			.interactionProfile = profile,
+			.countSuggestedBindings = len(quest_actions),
+			.suggestedBindings = bindings,
+		};
+		XrResult res = xrSuggestInteractionProfileBindings(xr_instance, &suggested);
+		printf("controller profile %s: %s\n", profiles[i], XR_SUCCEEDED(res) ? "ok" : "not supported");
+		if (XR_SUCCEEDED(res)) {
+			profiles_accepted++;
+		}
+	}
+	error_if(!profiles_accepted, "No supported controller profile");
 
 	XrSessionActionSetsAttachInfo attach = {
 		.type = XR_TYPE_SESSION_ACTION_SETS_ATTACH_INFO,

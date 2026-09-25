@@ -230,9 +230,11 @@ The following is a table for project specific build flags using CMake:
 | `PATH_USERDATA`  | Set a static path where user data (e.g. game saves) are stored.                         | Any valid filesystem path.                                                                                              | Unset                                                                                       |
 | `DEV_BUILD`      | Sets the assets/userdata path to the source directory. Useful when testing any changes. | `ON`, `OFF`                                                                                                             | `OFF`                                                                                       |
 
-## Meta Quest (VR)
+## Meta Quest and PICO (VR)
 
-A standalone build for Meta Quest 2/3/3S/Pro headsets (arm64, OpenXR). Races
+A standalone build for Meta Quest 2/3/3S/Pro and PICO 4/4 Ultra/Neo3 headsets
+(arm64, OpenXR). Both use the same native code; only the Android manifest
+differs. Races
 are rendered in stereo 3D with head tracking and the HUD on a floating panel;
 the intro, title and menus are shown on a large virtual screen.
 
@@ -242,8 +244,9 @@ Central on the first build. Set `ANDROID_HOME` if the SDK isn't in
 `~/Android/Sdk`.
 
 ```sh
-# Build build/android/wipeout-quest-<version>.apk and install it via adb
-android/build.sh install
+# Build build/android/wipeout-<headset>-<version>.apk and install it via adb
+android/build.sh quest install
+android/build.sh pico install
 
 # Copy the game data from ./wipeout/ (see Running) to the headset
 android/push_data.sh
@@ -254,7 +257,7 @@ on the headset. Directories created there through adb are not readable by the
 game, so `push_data.sh` sends a single `wipeout.tar`, which the game unpacks
 on its next start.
 
-Default controls on the Touch controllers: left stick to steer, right trigger
+Default controls on the Touch/PICO controllers: left stick to steer, right trigger
 to thrust, left trigger to fire, grips for the airbrakes, Y to change the view,
 menu button to pause, A/B to select/go back in menus.
 

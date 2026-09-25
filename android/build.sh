@@ -1,16 +1,29 @@
 #!/bin/bash
-# Builds a standalone APK for Meta Quest (arm64, OpenXR).
+# Builds a standalone APK for Meta Quest or PICO headsets (arm64, OpenXR).
+# The native code is the same; only the Android manifest differs.
 #
 # Requirements: Android SDK with NDK, build-tools and a platform (API 32+),
 # CMake, Ninja, Java (keytool). Set ANDROID_HOME if the SDK is not in
 # ~/Android/Sdk. Usage:
 #
-#   android/build.sh            build build/android/wipeout-quest-<version>.apk
-#   android/build.sh install    build and install via adb
+#   android/build.sh [quest|pico] [install]
+#
+# builds build/android/wipeout-<headset>-<version>.apk (default: quest) and
+# optionally installs it via adb.
 
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+HEADSET=quest
+INSTALL=
+for arg in "$@"; do
+	case "$arg" in
+		quest|pico) HEADSET="$arg" ;;
+		install) INSTALL=1 ;;
+		*) echo "Unknown argument: $arg" >&2; exit 1 ;;
+	esac
+done
+MANIFEST="$ROOT/android/AndroidManifest.$HEADSET.xml"
 OUT="$ROOT/build/android"
 SDK="${ANDROID_HOME:-$HOME/Android/Sdk}"
 NDK="${ANDROID_NDK_HOME:-$(ls -d "$SDK"/ndk/* | sort -V | tail -1)}"
@@ -21,8 +34,8 @@ TARGET_SDK=32
 OPENXR_VERSION=1.1.63
 OPENXR_DIR="$OUT/openxr_loader-$OPENXR_VERSION"
 ABI=arm64-v8a
-VERSION="$(sed -n 's/.*android:versionName="\([^"]*\)".*/\1/p' "$ROOT/android/AndroidManifest.xml")"
-APK="$OUT/wipeout-quest-$VERSION.apk"
+VERSION="$(sed -n 's/.*android:versionName="\([^"]*\)".*/\1/p' "$MANIFEST")"
+APK="$OUT/wipeout-$HEADSET-$VERSION.apk"
 
 mkdir -p "$OUT"
 
@@ -51,7 +64,7 @@ cp "$OUT/cmake/libwipeout.so" "$OUT/apk/lib/$ABI/"
 cp "$OPENXR_DIR/prefab/modules/openxr_loader/libs/android.$ABI/libopenxr_loader.so" "$OUT/apk/lib/$ABI/"
 
 "$BUILD_TOOLS/aapt2" link -o "$OUT/unaligned.apk" \
-	--manifest "$ROOT/android/AndroidManifest.xml" \
+	--manifest "$MANIFEST" \
 	-I "$PLATFORM_JAR" \
 	--min-sdk-version $MIN_SDK --target-sdk-version $TARGET_SDK
 (cd "$OUT/apk" && zip -qr "$OUT/unaligned.apk" lib)
@@ -69,6 +82,6 @@ rm -f "$OUT/unaligned.apk" "$OUT/aligned.apk"
 
 echo "Built $APK"
 
-if [ "${1:-}" = "install" ]; then
+if [ -n "$INSTALL" ]; then
 	adb install -r "$APK"
 fi
