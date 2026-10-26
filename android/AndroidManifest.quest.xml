@@ -19,6 +19,7 @@
 	</queries>
 
 	<application
+		android:icon="@drawable/ic_launcher"
 		android:label="Wipeout Rewrite VR"
 		android:hasCode="false"
 		android:allowBackup="false"

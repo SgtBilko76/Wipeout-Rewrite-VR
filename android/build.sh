@@ -63,10 +63,12 @@ rm -rf "$OUT/apk" && mkdir -p "$OUT/apk/lib/$ABI"
 cp "$OUT/cmake/libwipeout.so" "$OUT/apk/lib/$ABI/"
 cp "$OPENXR_DIR/prefab/modules/openxr_loader/libs/android.$ABI/libopenxr_loader.so" "$OUT/apk/lib/$ABI/"
 
+"$BUILD_TOOLS/aapt2" compile --dir "$ROOT/android/res" -o "$OUT/res.zip"
 "$BUILD_TOOLS/aapt2" link -o "$OUT/unaligned.apk" \
 	--manifest "$MANIFEST" \
 	-I "$PLATFORM_JAR" \
-	--min-sdk-version $MIN_SDK --target-sdk-version $TARGET_SDK
+	--min-sdk-version $MIN_SDK --target-sdk-version $TARGET_SDK \
+	"$OUT/res.zip"
 (cd "$OUT/apk" && zip -qr "$OUT/unaligned.apk" lib)
 "$BUILD_TOOLS/zipalign" -f -P 16 4 "$OUT/unaligned.apk" "$OUT/aligned.apk"
 
