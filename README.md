@@ -1,5 +1,7 @@
 # Wipeout Rewrite VR
 
+**Download, install guide, controls and pictures: [portroyale.online/wipeout.html](https://portroyale.online/wipeout.html)**
+
 A standalone VR port of [wipEout Rewrite](https://github.com/phoboslab/wipeout-rewrite)
 for Meta Quest and PICO headsets. Races are rendered in stereo 3D with head
 tracking, the HUD floats in front of you, and the menus are shown on a large
