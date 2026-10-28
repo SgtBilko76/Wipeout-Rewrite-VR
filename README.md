@@ -276,6 +276,8 @@ Default controls on the Touch/PICO controllers: left stick to steer, right trigg
 to thrust, left trigger to fire, grips for the airbrakes, Y to change the view,
 menu button to pause, A/B to select/go back in menus.
 
+![Wipeout Rewrite VR controller mapping](docs/controls.webp)
+
 # Running
 
 This repository does not contain the assets (textures, 3d models etc.) required to run the game. This code mostly assumes to have the PSX NTSC data, but some menu models from the PC version are required as well. Both of these can be easily found on archive.org and similar sites. The music (optional) needs to be provided in [QOA format](https://github.com/phoboslab/qoa). The intro video as MPEG1.
